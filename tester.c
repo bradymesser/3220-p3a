@@ -14,14 +14,14 @@
 #define ASIZE 8
 
 
-static void
-handler(int sig, siginfo_t *si, void* unused)
-{
-    // TODO: Use fprintf or perror to print 
-    // a message indicating a segmentation fault
-    // happened and provide the memory address
-    // where the fault happened
-}
+// static void
+// handler(int sig, siginfo_t *si, void* unused)
+// {
+//     // TODO: Use fprintf or perror to print
+//     // a message indicating a segmentation fault
+//     // happened and provide the memory address
+//     // where the fault happened
+// }
 
 void test1(void)
 {
@@ -87,14 +87,14 @@ int main(void)
 {
     struct sigaction sa;
     /*
-     * TODO: Overwrite the signal handler for 
+     * TODO: Overwrite the signal handler for
      * SIGSEGV
      */
 
 
     runTest(test1);
-    runTest(test2);
-    runTest(test3);
+    // runTest(test2);
+    // runTest(test3);
 
     return 0;
 }
