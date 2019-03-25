@@ -6,7 +6,7 @@ tester: tester.c libparray.so
 
 libparray.so: parray.c
 	gcc -g -c -fpic parray.c -Wall -Wextra -Werror
-	-echo "TODO: Replace this with line to make .so file"
+	gcc parray.o -shared -o libparray.so
 
 clean:
 	rm -f *.o *.so tester vgcore*
