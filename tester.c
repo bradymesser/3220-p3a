@@ -14,22 +14,28 @@
 #define ASIZE 8
 
 
-// static void
-// handler(int sig, siginfo_t *si, void* unused)
-// {
-//     // TODO: Use fprintf or perror to print
-//     // a message indicating a segmentation fault
-//     // happened and provide the memory address
-//     // where the fault happened
-// }
+static void
+handler(int sig, siginfo_t *si, void* unused)
+{
+    // TODO: Use fprintf or perror to print
+    // a message indicating a segmentation fault
+    // happened and provide the memory address
+    // where the fault happened
+    if (sig){}
+    if (si) {}
+    if (unused) {}
+    fprintf(stderr, "Got SIGSEGV at address: %p\n", si->si_addr);
+}
 
 void test1(void)
 {
     struct parray* p = parray_new(sizeof(int), ASIZE);
     int* k;
+    //printf("ASIZE: %d\n", ASIZE);
     for (int i = 0; i < ASIZE; i++)
     {
         k = parray_entry(p, i);
+        //printf("HERE2\n");
         *k = i + 1000;
     }
     for (int i = 0; i < ASIZE; i++)
@@ -86,15 +92,17 @@ void runTest(void (*test) (void))
 int main(void)
 {
     struct sigaction sa;
+    sa.sa_handler = handler;
     /*
      * TODO: Overwrite the signal handler for
      * SIGSEGV
      */
+     sigaction(SIGSEGV, &sa, NULL);
 
 
     runTest(test1);
-    // runTest(test2);
-    // runTest(test3);
+    runTest(test2);
+    runTest(test3);
 
     return 0;
 }
