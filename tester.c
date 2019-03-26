@@ -95,12 +95,9 @@ int main(void)
       fprintf(stderr, "SIGACTION ERROR");
       return -1;
     }
-
-
     runTest(test1);
     runTest(test2);
     runTest(test3);
-
     return 0;
 }
 

@@ -45,15 +45,13 @@ void* parray_entry(struct parray* p, int index)
     while ((float)p->size/pgsize > 1) {
       pgsize = pgsize * 2;
     }
-    //printf("array start: %p\npagesize: %d\nsize: %d\n", p->array, pgsize, p->size);
     byte* entry = p->array + (pgsize * (2+(2*index))) - (p->size + 1);
-    // TODO: compute correct entry
-    // |4096| data |4096| data |4096| data |4096
-    //0: 2 pages
-    //1: 4 pages
-    //2: 6 pages
-    //pages = 2 + (2*index)
     //printf("index: %d\nentry: %p\nentry+size: %p\n", index, entry, entry+p->size);
-    ////printf("entry: %p\n", entry);
+    // TODO: compute correct entry
+    // |pgsize| data |pgsize| data |pgsize| data |pgsize
+    //index 0: 2 pages
+    //index 1: 4 pages
+    //index 2: 6 pages
+    //pages = 2 + (2*index)
     return entry;
 }

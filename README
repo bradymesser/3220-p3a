@@ -1,0 +1,12 @@
+parray_new:
+  This function allocates a paranoid array with guard pages surrounding each block of memory.
+  Each block of memory will be a multiple of 4096 in size, including the guard pages.
+  The memory is allocated with posix_memalign with enough space for count + 2 pages,
+  since there will be a guard page before index 0 and a guard page after the last index,
+  then the allocated memory is looped through and guard pages are created with mprotect for every
+  other page starting at the first page.
+
+parray_entry:
+  This function returns a pointer to the specified index.  To calculate the offset
+  we need to skip over (pgsize * (2 + (2*index)) pages.  This will get us to the end of the correct page,
+  then subtract size + 1 to get the start of the entry (add 1 because the memory starts at 0).
