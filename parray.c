@@ -5,8 +5,6 @@
 #include <sys/mman.h>
 #include "parray.h"
 
-// char is confusing for non-strings...
-// why not just call it byte?
 typedef char byte;
 
 parray_t* parray_new(int size, int count)
@@ -19,20 +17,23 @@ parray_t* parray_new(int size, int count)
       pgsize = pgsize * 2;
     }
     p->size = size;
-    posix_memalign(&p->array, pgsize, pgsize*(count+2));
+    //for each array, there will be count + 2 guard pages, as well as count data pages
+    //since counting starts at 0 only add 1 to count instead of 2
+    posix_memalign(&p->array, pgsize, pgsize*(count+1+count));
     int j = 1;
-    //loop through memory region protecting appropriate areas
-    for (int i = 0; i < pgsize*(count+2); i = i + pgsize) {
+    //loop through memory region protecting appropriate pages
+    for (int i = 0; i < pgsize*(count+1+count); i = i + pgsize) {
       if ((j % 2) == 0) {
-        //printf("Region %p to %p has data\n", p->array + i, p->array + i + pgsize-1);
+        //printf("Region %d is %p to %p\n", (j/2)-1, p->array + i, p->array + i + pgsize-1);
       }
       else {
         if (mprotect(p->array + i, pgsize, PROT_NONE)) {
-              printf("ERROR WITH MPROTECT\n");
+              fprintf(stderr,"ERROR WITH MPROTECT\n");
+              exit(-1);
         }
-        else {
-          //printf("Region %p to %p is protected\n", p->array + i, p->array + i + pgsize - 1);
-        }
+        // else {
+        //   printf("Region %p to %p is protected\n", p->array + i, p->array + i + pgsize - 1);
+        // }
       }
       j = j + 1;
     }
@@ -45,13 +46,8 @@ void* parray_entry(struct parray* p, int index)
     while ((float)p->size/pgsize > 1) {
       pgsize = pgsize * 2;
     }
-    byte* entry = p->array + (pgsize * (2+(2*index))) - (p->size + 1);
+    //start at beginning of array, skip to end of correct region, subtract size to get beginning of data
+    byte* entry = p->array + (pgsize * (2+(2*index))) - (p->size);
     //printf("index: %d\nentry: %p\nentry+size: %p\n", index, entry, entry+p->size);
-    // TODO: compute correct entry
-    // |pgsize| data |pgsize| data |pgsize| data |pgsize
-    //index 0: 2 pages
-    //index 1: 4 pages
-    //index 2: 6 pages
-    //pages = 2 + (2*index)
     return entry;
 }

@@ -12,7 +12,9 @@
 #include "parray.h"
 
 #define ASIZE 8
-
+/*
+|GP|data|GP|DATA|GP|DATA|GP|DATA|GP|data|GP|DATA|GP|DATA|GP|DATA|GP|
+*/
 
 static void
 handler(int sig, siginfo_t *si, void* unused)
@@ -57,7 +59,6 @@ void test2(void)
         k = parray_entry(p, i);
         printf("i, *k = %d, %s\n", i, k);
     }
-
     k[1024] = '!';
     exit(1);
 }
