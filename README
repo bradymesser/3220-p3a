@@ -10,3 +10,5 @@ parray_entry:
   This function returns a pointer to the specified index.  To calculate the offset
   we need to skip over (pgsize * (2 + (2*index)) pages.  This will get us to the end of the correct page,
   then subtract size to get the start of the entry.
+
+To get the libparray.so file to work properly I had to add the current working directory to my PATH, the line I used is in the makefile but it needs to be ran on the command line since the Makefile is a separate process from the shell.
