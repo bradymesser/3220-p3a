@@ -9,4 +9,4 @@ parray_new:
 parray_entry:
   This function returns a pointer to the specified index.  To calculate the offset
   we need to skip over (pgsize * (2 + (2*index)) pages.  This will get us to the end of the correct page,
-  then subtract size + 1 to get the start of the entry (add 1 because the memory starts at 0).
+  then subtract size to get the start of the entry.
